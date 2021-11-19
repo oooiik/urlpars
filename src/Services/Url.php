@@ -7,6 +7,7 @@ use Oooiik\Urlpars\Contracts\Url as ContractUrl;
 class Url implements ContractUrl
 {
     public $firstUrl;
+    public $url;
 
     public $protocol;
     public $user;
@@ -34,6 +35,7 @@ class Url implements ContractUrl
     {
         $this->firstUrl = $firstUrl;
         $this->set();
+        $this->setUrl();
     }
 
     public static function one(string $firstUrl)
@@ -46,7 +48,7 @@ class Url implements ContractUrl
         $parse = parse_url($this->firstUrl);
         $this->protocol = in_array($parse['scheme'] ?? null, self::PROTOCOL) ? $parse['scheme'] : null;
         $this->user = $parse['user'] ?? null;
-        $this->password = $parse['password'] ?? null;
+        $this->password = $parse['pass'] ?? null;
         $this->host = $parse['host'] ?? null;
         $this->port = $parse['port'] ?? null;
         $this->path = $parse['path'] ?? null;
@@ -55,8 +57,8 @@ class Url implements ContractUrl
 
         if($this->host){
             $domain = explode('.', $this->host);
-            $this->domain_top = $domain[0] ? array_pop($domain) : null;
-            $this->domain_name = $domain[0] ? array_pop($domain) : null;
+            $this->domain_top = count($domain) ? array_pop($domain) : null;
+            $this->domain_name = count($domain) ? array_pop($domain) : null;
             $this->domain_subs = $domain;
         }
 
@@ -74,6 +76,11 @@ class Url implements ContractUrl
         }
     }
 
+    public function setUrl()
+    {
+        $this->url .= $this->protocol ? $this->protocol.'://' : '';
+        $this->url .= $this->host ?? '';
+    }
 
     public function all()
     {
