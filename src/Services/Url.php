@@ -11,7 +11,12 @@ class Url implements ContractUrl
     public $protocol;
     public $user;
     public $password;
+
     public $host;
+    public $domain_top;
+    public $domain_name;
+    public $domain_subs = [];
+
     public $port;
 
     public $path;
@@ -47,6 +52,13 @@ class Url implements ContractUrl
         $this->path = $parse['path'] ?? null;
         $this->query = $parse['query'] ?? null;
         $this->fragment = $parse['fragment'] ?? null;
+
+        if($this->host){
+            $domain = explode('.', $this->host);
+            $this->domain_top = $domain[0] ? array_pop($domain) : null;
+            $this->domain_name = $domain[0] ? array_pop($domain) : null;
+            $this->domain_subs = $domain;
+        }
 
         if($this->path){
             $path = pathinfo($this->path);
