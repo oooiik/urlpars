@@ -93,7 +93,7 @@ class Url implements ContractUrl
         string $protocol = null,
         string $host,
         string $path = null,
-        array $attributes = null,
+        array $attributes = [],
         string $fragment = null
     ) {
         $url = '';
